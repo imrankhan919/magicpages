@@ -1,1 +1,31 @@
-console.log("Hello World!")
+import express from "express"
+import dotenv from "dotenv"
+import colors from "colors"
+import connectDB from "./config/dbConfig.js"
+
+// Local Imports
+import authRoutes from "./routes/authRoutes.js"
+
+dotenv.config()
+
+const PORT = process.env.PORT || 5000
+const app = express()
+
+// DB Connection 
+connectDB()
+
+
+app.get("/", (req, res) => {
+    res.json({
+        message: "MAGIC PAGES API 1.0.."
+    })
+})
+
+// Auth routes
+app.use("/api/auth", authRoutes)
+
+
+
+app.listen(PORT, () => {
+    console.log(`SERVER IS RUNNING AT PORT : ${PORT}`.bgBlue)
+})
