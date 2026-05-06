@@ -5,6 +5,7 @@ import connectDB from "./config/dbConfig.js"
 
 // Local Imports
 import authRoutes from "./routes/authRoutes.js"
+import errorHandler from "./middlewares/errorHandler.js"
 
 dotenv.config()
 
@@ -29,6 +30,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes)
 
 
+// Error Handler
+app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log(`SERVER IS RUNNING AT PORT : ${PORT}`.bgBlue)

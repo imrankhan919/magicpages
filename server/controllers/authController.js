@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 import User from "../models/userModel.js"
 
 
@@ -34,13 +35,53 @@ const registerUser = async (req, res) => {
         throw new Error("User not found!")
     }
 
-    res.status(201).json(user)
+    res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        credits: user.credits,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt,
+        token: generateToken(user._id)
+    })
 
 }
 
 const loginUser = async (req, res) => {
-    res.send("User Logined")
+
+    const { email, password } = req.body
+
+    if (!email || !password) {
+        res.status(409)
+        throw new Error("Please Fill All Details!")
+    }
+
+    const user = await User.findOne({ email })
+
+
+    if (user && await bcrypt.compare(password, user.password)) {
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            credits: user.credits,
+            isAdmin: user.isAdmin,
+            createdAt: user.createdAt,
+            token: generateToken(user._id)
+        })
+    } else {
+        // res.status(401)
+        throw new Error("Invalid Credentials!")
+    }
 }
+
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
+}
+
 
 
 const authController = { registerUser, loginUser }
