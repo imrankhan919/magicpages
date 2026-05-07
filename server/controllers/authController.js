@@ -84,7 +84,14 @@ const generateToken = (id) => {
 
 
 
-const authController = { registerUser, loginUser }
+const privateController = async (req, res) => {
+    res.send("Request Made By : " + req.user.name)
+}
+
+
+
+
+const authController = { registerUser, loginUser, privateController }
 
 
 export default authController
