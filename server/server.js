@@ -6,6 +6,7 @@ import connectDB from "./config/dbConfig.js"
 // Local Imports
 import authRoutes from "./routes/authRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
 import errorHandler from "./middlewares/errorHandler.js"
 
 dotenv.config()
@@ -32,6 +33,10 @@ app.use("/api/auth", authRoutes)
 
 // Admin Routes
 app.use("/api/admin", adminRoutes)
+
+// User Routes
+app.use("/api/user", userRoutes)
+
 
 // Error Handler
 app.use(errorHandler)
