@@ -26,7 +26,25 @@ const uploadRefrenceImage = async (req, res) => {
 }
 
 
-const userController = { uploadRefrenceImage }
+const getMyRefrenceImages = async (req, res) => {
+
+    const userId = req.user._id
+
+    const images = await RefrenceImage.find({ user: userId })
+
+    if (!images) {
+        res.status(404)
+        throw new Error("Images Not Found!")
+    }
+
+    res.status(200).json(images)
+
+
+}
+
+
+
+const userController = { uploadRefrenceImage, getMyRefrenceImages }
 
 
 export default userController

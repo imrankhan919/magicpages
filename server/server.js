@@ -7,6 +7,7 @@ import connectDB from "./config/dbConfig.js"
 import authRoutes from "./routes/authRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import imageGenRoutes from "./routes/imageGenRoutes.js"
 import errorHandler from "./middlewares/errorHandler.js"
 
 dotenv.config()
@@ -37,6 +38,8 @@ app.use("/api/admin", adminRoutes)
 // User Routes
 app.use("/api/user", userRoutes)
 
+// Image Gen Routes
+app.use("/api/image", imageGenRoutes)
 
 // Error Handler
 app.use(errorHandler)
