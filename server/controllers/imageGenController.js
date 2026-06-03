@@ -4,6 +4,7 @@ import path from "node:path";
 import { GoogleGenAI } from "@google/genai";
 import uploadToCloudinary from "../middlewares/cloudinaryMiddleware.js";
 import GenImage from "../models/genImageModel.js";
+import ImageTemplate from "../models/templateModel.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -69,18 +70,28 @@ const generateImage = async (imageURL, prompt) => {
 
 
 const transformImage = async (req, res) => {
-    const { imageURL, prompt } = req.body;
 
-    if (!imageURL || !prompt) {
+    const userId = req.user._id
+
+    const { imageURL, templateId } = req.body;
+
+    if (!imageURL || !templateId) {
         res.status(409)
         throw new Error("Please fill all details!")
     }
 
-    const userId = req.user._id
+    // check if template exists
+    const template = await ImageTemplate.findById(templateId)
 
-    const generatedImageResult = await generateImage(imageURL, prompt)
+    if (!template) {
+        res.status(404)
+        throw new Error('Template Not Exists')
+    }
 
-    console.log(generatedImageResult)
+
+    const generatedImageResult = await generateImage(imageURL, template.prompt)
+
+
 
     const image = new GenImage({
         user: userId,

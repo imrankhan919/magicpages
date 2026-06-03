@@ -2,6 +2,7 @@ import fs from "node:fs"
 import uploadToCloudinary from "../middlewares/cloudinaryMiddleware.js"
 import RefrenceImage from "../models/refrenceImageModel.js"
 import CreditRequest from "../models/creditRequestModel.js"
+import ImageTemplate from "../models/templateModel.js"
 
 const uploadRefrenceImage = async (req, res) => {
 
@@ -75,11 +76,23 @@ const requestCredits = async (req, res) => {
 }
 
 
+const getTemplates = async (req, res) => {
+    const templates = await ImageTemplate.find()
+
+    if (!templates) {
+        res.status(404)
+        throw new Error("Templates Not Found")
+    }
+
+    res.status(200).json(templates)
+
+
+}
 
 
 
 
-const userController = { uploadRefrenceImage, getMyRefrenceImages, requestCredits }
+const userController = { uploadRefrenceImage, getMyRefrenceImages, requestCredits, getTemplates }
 
 
 export default userController
