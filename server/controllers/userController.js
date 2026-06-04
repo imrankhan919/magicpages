@@ -3,6 +3,8 @@ import uploadToCloudinary from "../middlewares/cloudinaryMiddleware.js"
 import RefrenceImage from "../models/refrenceImageModel.js"
 import CreditRequest from "../models/creditRequestModel.js"
 import ImageTemplate from "../models/templateModel.js"
+import User from "../models/userModel.js"
+import GenImage from "../models/genImageModel.js"
 
 const uploadRefrenceImage = async (req, res) => {
 
@@ -89,10 +91,31 @@ const getTemplates = async (req, res) => {
 
 }
 
+const getProfile = async (req, res) => {
+
+    const userId = req.user._id
+
+    const user = await User.findById(userId)
+    const refrenceImages = await RefrenceImage.find({ user: user })
+    const generatedImages = await GenImage.find({ user: user })
+    const creditHistory = await CreditRequest.find({ user: user })
+
+
+    if (!user) {
+        res.status(404)
+        throw new Error("Error in getting profile")
+    }
 
 
 
-const userController = { uploadRefrenceImage, getMyRefrenceImages, requestCredits, getTemplates }
+    res.status(200).json({ user, refrenceImages, generatedImages, creditHistory })
+
+
+
+}
+
+
+const userController = { uploadRefrenceImage, getMyRefrenceImages, requestCredits, getTemplates, getProfile }
 
 
 export default userController

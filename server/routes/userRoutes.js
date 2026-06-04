@@ -9,5 +9,6 @@ router.post("/request_credits", protect.forUser, userController.requestCredits)
 router.post("/upload", protect.forUser, upload.single('image'), userController.uploadRefrenceImage)
 router.get("/images", protect.forUser, userController.getMyRefrenceImages)
 router.get("/templates", protect.forUser, userController.getTemplates)
+router.get("/profile", protect.forUser, userController.getProfile)
 
 export default router
